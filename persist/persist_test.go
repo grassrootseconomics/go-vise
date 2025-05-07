@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/db/mem"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/db/mem"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 func TestCreateCache(t *testing.T) {

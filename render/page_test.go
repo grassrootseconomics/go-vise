@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/internal/resourcetest"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/internal/resourcetest"
 )
 
 func TestPageCurrentSize(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"git.defalsify.org/vise.git/lang"
-	"git.defalsify.org/vise.git/testdata/testlocale"
+	"github.com/grassrootseconomics/go-vise/lang"
+	"github.com/grassrootseconomics/go-vise/testdata/testlocale"
 )
 
 func TestPoGetNotExist(t *testing.T) {

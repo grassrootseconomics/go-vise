@@ -5,9 +5,9 @@ import (
 	"encoding/binary"
 	"time"
 
-	"git.defalsify.org/vise.git/logging"
-	"git.defalsify.org/vise.git/lang"
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/logging"
+	"github.com/grassrootseconomics/go-vise/lang"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 var (

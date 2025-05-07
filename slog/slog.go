@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"time"
 
-	"git.defalsify.org/vise.git/logging"
+	"github.com/grassrootseconomics/go-vise/logging"
 )
 
 const (

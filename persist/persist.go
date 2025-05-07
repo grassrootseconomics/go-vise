@@ -6,9 +6,9 @@ import (
 
 	"github.com/fxamacker/cbor/v2"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/db"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/db"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 // Persister abstracts storage and retrieval of state and cache.

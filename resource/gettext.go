@@ -5,7 +5,7 @@ import (
 
 	gotext "gopkg.in/leonelquinteros/gotext.v1"
 
-	"git.defalsify.org/vise.git/lang"
+	"github.com/grassrootseconomics/go-vise/lang"
 )
 
 const (

@@ -9,8 +9,8 @@ import (
 	"path"
 	"testing"
 
-	"git.defalsify.org/vise.git/db"
-	"git.defalsify.org/vise.git/lang"
+	"github.com/grassrootseconomics/go-vise/db"
+	"github.com/grassrootseconomics/go-vise/lang"
 )
 
 type testCase struct {

@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"git.defalsify.org/vise.git/resource"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/resource"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 type NodeMap struct {

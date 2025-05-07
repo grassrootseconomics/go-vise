@@ -4,8 +4,8 @@ package resourcetest
 //	"context"
 //	"fmt"
 //
-//	"git.defalsify.org/vise.git/db"
-//	"git.defalsify.org/vise.git/resource"
+//	"github.com/grassrootseconomics/go-vise/db"
+//	"github.com/grassrootseconomics/go-vise/resource"
 //)
 
 //type TestSizeResource struct {

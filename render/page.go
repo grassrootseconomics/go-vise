@@ -7,8 +7,8 @@ import (
 	"strings"
 	"text/template"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/resource"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/resource"
 )
 
 // Page executes output rendering into pages constrained by size.

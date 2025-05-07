@@ -3,9 +3,9 @@ package resourcetest
 import (
 	"context"
 
-	"git.defalsify.org/vise.git/db"
-	"git.defalsify.org/vise.git/db/mem"
-	"git.defalsify.org/vise.git/resource"
+	"github.com/grassrootseconomics/go-vise/db"
+	"github.com/grassrootseconomics/go-vise/db/mem"
+	"github.com/grassrootseconomics/go-vise/resource"
 )
 
 type TestResource struct {

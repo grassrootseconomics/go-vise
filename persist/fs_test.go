@@ -6,10 +6,10 @@ import (
 	"reflect"
 	"testing"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/db/mem"
-	"git.defalsify.org/vise.git/state"
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/db/mem"
+	"github.com/grassrootseconomics/go-vise/state"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 func TestSerializeState(t *testing.T) {

@@ -8,7 +8,7 @@ import (
 
 	testdataloader "github.com/peteole/testdata-loader"
 
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 type genFunc func() error

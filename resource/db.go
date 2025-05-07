@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 const (

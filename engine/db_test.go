@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"git.defalsify.org/vise.git/cache"
-	memdb "git.defalsify.org/vise.git/db/mem"
-	"git.defalsify.org/vise.git/persist"
-	"git.defalsify.org/vise.git/resource"
-	"git.defalsify.org/vise.git/state"
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/cache"
+	memdb "github.com/grassrootseconomics/go-vise/db/mem"
+	"github.com/grassrootseconomics/go-vise/persist"
+	"github.com/grassrootseconomics/go-vise/resource"
+	"github.com/grassrootseconomics/go-vise/state"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 func getNull() io.WriteCloser {

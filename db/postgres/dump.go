@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 // Dump implements Db.

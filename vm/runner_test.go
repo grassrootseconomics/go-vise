@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/internal/resourcetest"
-	"git.defalsify.org/vise.git/render"
-	"git.defalsify.org/vise.git/resource"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/internal/resourcetest"
+	"github.com/grassrootseconomics/go-vise/render"
+	"github.com/grassrootseconomics/go-vise/resource"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 var (

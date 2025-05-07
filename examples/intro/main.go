@@ -11,11 +11,11 @@ import (
 
 	testdataloader "github.com/peteole/testdata-loader"
 
-	"git.defalsify.org/vise.git/cache"
-	fsdb "git.defalsify.org/vise.git/db/fs"
-	"git.defalsify.org/vise.git/engine"
-	"git.defalsify.org/vise.git/resource"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/cache"
+	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
+	"github.com/grassrootseconomics/go-vise/engine"
+	"github.com/grassrootseconomics/go-vise/resource"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 const (

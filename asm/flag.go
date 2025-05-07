@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 // FlagParser is used to resolve flag strings to corresponding

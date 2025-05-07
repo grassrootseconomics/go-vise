@@ -5,8 +5,8 @@ import (
 	"context"
 	"testing"
 
-	"git.defalsify.org/vise.git/db"
-	"git.defalsify.org/vise.git/db/mem"
+	"github.com/grassrootseconomics/go-vise/db"
+	"github.com/grassrootseconomics/go-vise/db/mem"
 )
 
 func TestDb(t *testing.T) {

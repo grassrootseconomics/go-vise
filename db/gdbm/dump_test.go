@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 func TestDumpGdbm(t *testing.T) {

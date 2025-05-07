@@ -10,7 +10,7 @@ import (
 	"os"
 	"path"
 
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 // holds string (filepath) versions of LookupKey

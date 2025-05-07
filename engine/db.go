@@ -8,12 +8,12 @@ import (
 	"io"
 	"os"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/persist"
-	"git.defalsify.org/vise.git/render"
-	"git.defalsify.org/vise.git/resource"
-	"git.defalsify.org/vise.git/state"
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/persist"
+	"github.com/grassrootseconomics/go-vise/render"
+	"github.com/grassrootseconomics/go-vise/resource"
+	"github.com/grassrootseconomics/go-vise/state"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 var (

@@ -9,8 +9,8 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 	pgxmock "github.com/pashagolub/pgxmock/v4"
 
-	"git.defalsify.org/vise.git/db"
-	"git.defalsify.org/vise.git/db/dbtest"
+	"github.com/grassrootseconomics/go-vise/db"
+	"github.com/grassrootseconomics/go-vise/db/dbtest"
 )
 
 var (

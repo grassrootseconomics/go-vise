@@ -12,7 +12,7 @@ import (
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
 
-	"git.defalsify.org/vise.git/asm"
+	"github.com/grassrootseconomics/go-vise/asm"
 )
 
 type arg struct {

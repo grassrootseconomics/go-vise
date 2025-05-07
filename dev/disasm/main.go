@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 func main() {

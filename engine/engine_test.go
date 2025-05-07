@@ -10,14 +10,14 @@ import (
 	//	"path"
 	"testing"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/db"
-	fsdb "git.defalsify.org/vise.git/db/fs"
-	"git.defalsify.org/vise.git/lang"
-	"git.defalsify.org/vise.git/resource"
-	"git.defalsify.org/vise.git/state"
-	"git.defalsify.org/vise.git/testdata"
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/db"
+	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
+	"github.com/grassrootseconomics/go-vise/lang"
+	"github.com/grassrootseconomics/go-vise/resource"
+	"github.com/grassrootseconomics/go-vise/state"
+	"github.com/grassrootseconomics/go-vise/testdata"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 var (

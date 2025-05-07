@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 // holds string (hex) versions of lookupKey

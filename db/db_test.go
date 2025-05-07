@@ -5,7 +5,7 @@ import (
 	"context"
 	"testing"
 
-	"git.defalsify.org/vise.git/lang"
+	"github.com/grassrootseconomics/go-vise/lang"
 )
 
 func TestDbBase(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"context"
 	"os"
 
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 func (fdb *fsDb) nextElement() []byte {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"git.defalsify.org/vise.git/testdata"
+	"github.com/grassrootseconomics/go-vise/testdata"
 )
 
 func main() {

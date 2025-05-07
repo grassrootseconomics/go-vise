@@ -13,10 +13,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"git.defalsify.org/vise.git/db"
-	fsdb "git.defalsify.org/vise.git/db/fs"
-	gdbmdb "git.defalsify.org/vise.git/db/gdbm"
-	"git.defalsify.org/vise.git/logging"
+	"github.com/grassrootseconomics/go-vise/db"
+	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
+	gdbmdb "github.com/grassrootseconomics/go-vise/db/gdbm"
+	"github.com/grassrootseconomics/go-vise/logging"
 )
 
 var (

@@ -3,7 +3,7 @@ package asm
 import (
 	"testing"
 
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 func TestMenuInterpreter(t *testing.T) {

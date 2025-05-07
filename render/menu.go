@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"git.defalsify.org/vise.git/resource"
+	"github.com/grassrootseconomics/go-vise/resource"
 )
 
 // BrowseError is raised when browsing outside the page range of a rendered node.

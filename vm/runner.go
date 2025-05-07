@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/render"
-	"git.defalsify.org/vise.git/resource"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/render"
+	"github.com/grassrootseconomics/go-vise/resource"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 // ExternalCodeError indicates an error that occurred when resolving an external code symbol (LOAD, RELOAD).

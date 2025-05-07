@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 func TestLoopTop(t *testing.T) {

@@ -3,7 +3,7 @@ package asm
 import (
 	"fmt"
 
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 // BatchCode defines quasi-opcodes that expand to mulitple individual vm instructions.

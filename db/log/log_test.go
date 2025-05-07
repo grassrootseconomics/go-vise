@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"git.defalsify.org/vise.git/db"
-	"git.defalsify.org/vise.git/db/mem"
+	"github.com/grassrootseconomics/go-vise/db"
+	"github.com/grassrootseconomics/go-vise/db/mem"
 )
 
 func TestLogDb(t *testing.T) {

@@ -13,7 +13,7 @@ import (
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
 
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 // Asm assembles bytecode from the vise assembly mini-language.

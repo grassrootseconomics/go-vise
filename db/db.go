@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"git.defalsify.org/vise.git/lang"
+	"github.com/grassrootseconomics/go-vise/lang"
 )
 
 const (

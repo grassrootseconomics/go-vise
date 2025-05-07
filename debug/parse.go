@@ -1,8 +1,8 @@
 package debug
 
 import (
-	"git.defalsify.org/vise.git/logging"
-	"git.defalsify.org/vise.git/vm"
+	"github.com/grassrootseconomics/go-vise/logging"
+	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 var (

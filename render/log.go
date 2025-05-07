@@ -1,7 +1,7 @@
 package render
 
 import (
-	"git.defalsify.org/vise.git/logging"
+	"github.com/grassrootseconomics/go-vise/logging"
 )
 
 var (

@@ -7,7 +7,7 @@ import (
 
 	gdbm "github.com/graygnuorg/go-gdbm"
 
-	"git.defalsify.org/vise.git/db"
+	"github.com/grassrootseconomics/go-vise/db"
 )
 
 // Dump implements Db.

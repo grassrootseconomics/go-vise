@@ -8,11 +8,11 @@ import (
 	"path"
 	"strings"
 
-	fsdb "git.defalsify.org/vise.git/db/fs"
-	"git.defalsify.org/vise.git/debug"
-	"git.defalsify.org/vise.git/lang"
-	"git.defalsify.org/vise.git/logging"
-	"git.defalsify.org/vise.git/resource"
+	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
+	"github.com/grassrootseconomics/go-vise/debug"
+	"github.com/grassrootseconomics/go-vise/lang"
+	"github.com/grassrootseconomics/go-vise/logging"
+	"github.com/grassrootseconomics/go-vise/resource"
 )
 
 var (

@@ -5,8 +5,8 @@ import (
 	"io"
 	"os"
 
-	"git.defalsify.org/vise.git/cache"
-	"git.defalsify.org/vise.git/state"
+	"github.com/grassrootseconomics/go-vise/cache"
+	"github.com/grassrootseconomics/go-vise/state"
 )
 
 // Debug implementations output details about the execution state on each execution halt.
