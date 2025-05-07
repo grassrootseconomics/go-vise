@@ -9,7 +9,7 @@ import (
 
 // Dump implements Db.
 func (pdb *pgDb) Dump(ctx context.Context, key []byte) (*db.Dumper, error) {
-	tx, err := pdb.conn.BeginTx(ctx, defaultTxOptions)
+	tx, err := pdb.conn.Begin(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,8 @@ func (pdb *pgDb) Dump(ctx context.Context, key []byte) (*db.Dumper, error) {
 	query := fmt.Sprintf("SELECT key, value FROM %s.kv_vise WHERE key >= $1", pdb.schema)
 	rs, err := tx.Query(ctx, query, k)
 	if err != nil {
-		logg.Debugf("query fail", "err", err)
+		pdb.logg.
+			Debugf("query fail", "err", err)
 		tx.Rollback(ctx)
 		return nil, err
 	}
@@ -53,7 +54,8 @@ func (pdb *pgDb) dumpFunc(ctx context.Context) ([]byte, []byte) {
 	var kk []byte
 	var vv []byte
 	if !pdb.it.Next() {
-		logg.DebugCtxf(ctx, "no more data in pg iterator")
+		pdb.logg.
+			DebugCtxf(ctx, "no more data in pg iterator")
 		pdb.it = nil
 		pdb.itBase = nil
 		return nil, nil
