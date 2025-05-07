@@ -313,6 +313,7 @@ func (vm *Vm) runLoad(ctx context.Context, b []byte) ([]byte, error) {
 	}
 	r, err := vm.refresh(sym, vm.rs, ctx)
 	if err != nil {
+		logg.Errorf("load fail", "sym", sym, "error", err)
 		return b, err
 	}
 	err = vm.ca.Add(sym, r, uint16(sz))
@@ -334,6 +335,7 @@ func (vm *Vm) runReload(ctx context.Context, b []byte) ([]byte, error) {
 
 	r, err := vm.refresh(sym, vm.rs, ctx)
 	if err != nil {
+		logg.Errorf("reload fail", "sym", sym, "error", err)
 		return b, err
 	}
 	vm.ca.Update(sym, r)
@@ -528,7 +530,6 @@ func (vm *Vm) refresh(key string, rs resource.Resource, ctx context.Context) (st
 	input, _ := vm.st.GetInput()
 	r, err := fn(ctx, key, input)
 	if err != nil {
-		logg.Errorf("external function load fail", "key", key, "error", err)
 		_ = vm.st.SetFlag(state.FLAG_LOADFAIL)
 		return "", NewExternalCodeError(key, err).WithCode(r.Status)
 	}
