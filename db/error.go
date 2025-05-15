@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+
+	"github.com/jackc/pgx/v5"
 )
 
 const (
@@ -36,6 +38,10 @@ func (e ErrNotFound) Is(err error) bool {
 }
 
 func IsNotFound(err error) bool {
+	if errors.Is(err, pgx.ErrNoRows) {
+		return true
+	}
+
 	target := ErrNotFound{}
 	return target.Is(err)
 }
