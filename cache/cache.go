@@ -25,10 +25,8 @@ type Cache struct {
 
 // NewCache creates a new ready-to-use Cache object
 func NewCache() *Cache {
-	ca := &Cache{
-		Cache: []map[string]string{make(map[string]string)},
-		Sizes: make(map[string]uint16),
-	}
+	ca := &Cache{}
+	ca.ResetFull()
 	return ca
 }
 
@@ -130,6 +128,12 @@ func (ca *Cache) Update(key string, value string) error {
 	ca.Cache[checkFrame][key] = value
 	ca.CacheUseSize += uint32(len(value))
 	return nil
+}
+
+func (ca *Cache) ResetFull() {
+	ca.Cache = []map[string]string{make(map[string]string)}
+	ca.Sizes = make(map[string]uint16)
+	ca.CacheUseSize = 0
 }
 
 // Get implements the Memory interface.
