@@ -1,9 +1,9 @@
 package mem
 
 import (
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 var (
-	logg logging.Logger = logging.NewVanilla().WithDomain("memdb")
+	logg = slogging.Global.With("component", "memdb")
 )

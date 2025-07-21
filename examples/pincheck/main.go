@@ -14,8 +14,8 @@ import (
 	"github.com/grassrootseconomics/go-vise/cache"
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
 	"github.com/grassrootseconomics/go-vise/engine"
-	"github.com/grassrootseconomics/go-vise/logging"
 	"github.com/grassrootseconomics/go-vise/resource"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 	"github.com/grassrootseconomics/go-vise/state"
 )
 
@@ -25,7 +25,7 @@ const (
 )
 
 var (
-	logg      = logging.NewVanilla()
+	logg      = slogging.Global.With("component", "pincheck-example")
 	baseDir   = testdataloader.GetBasePath()
 	scriptDir = path.Join(baseDir, "examples", "pincheck")
 	pin       = []byte("1234")

@@ -1,9 +1,7 @@
 package cache
 
 import (
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
-var (
-	logg logging.Logger = logging.NewVanilla().WithDomain("cache")
-)
+var logg = slogging.Global.With("component", "cache")

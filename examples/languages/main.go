@@ -13,9 +13,9 @@ import (
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
 	"github.com/grassrootseconomics/go-vise/engine"
 	"github.com/grassrootseconomics/go-vise/lang"
-	"github.com/grassrootseconomics/go-vise/logging"
 	"github.com/grassrootseconomics/go-vise/persist"
 	"github.com/grassrootseconomics/go-vise/resource"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 	"github.com/grassrootseconomics/go-vise/state"
 )
 
@@ -24,7 +24,7 @@ const (
 )
 
 var (
-	logg           = logging.NewVanilla()
+	logg           = slogging.Global.With("component", "languages-example")
 	baseDir        = testdataloader.GetBasePath()
 	scriptDir      = path.Join(baseDir, "examples", "languages")
 	translationDir = path.Join(scriptDir, "locale")

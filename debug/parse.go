@@ -1,12 +1,12 @@
 package debug
 
 import (
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 	"github.com/grassrootseconomics/go-vise/vm"
 )
 
 var (
-	logg = logging.NewVanilla().WithDomain("debug")
+	logg = slogging.Global.With("component", "debug")
 )
 
 type NodeParseHandler struct {

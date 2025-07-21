@@ -7,15 +7,27 @@ import (
 	"os"
 	"runtime"
 	"time"
-
-	"github.com/grassrootseconomics/go-vise/logging"
 )
+
+// Logger defines the interface for structured logging
+type Logger interface {
+	Tracef(msg string, args ...any)
+	TraceCtxf(ctx context.Context, msg string, args ...any)
+	Debugf(msg string, args ...any)
+	DebugCtxf(ctx context.Context, msg string, args ...any)
+	Infof(msg string, args ...any)
+	InfoCtxf(ctx context.Context, msg string, args ...any)
+	Warnf(msg string, args ...any)
+	WarnCtxf(ctx context.Context, msg string, args ...any)
+	Errorf(msg string, args ...any)
+	ErrorCtxf(ctx context.Context, msg string, args ...any)
+}
 
 const (
 	LevelTrace slog.Level = slog.Level(-8)
 )
 
-var _ logging.Logger = (*Slog)(nil)
+var _ Logger = (*Slog)(nil)
 
 type (
 	Slog struct {
@@ -45,14 +57,29 @@ func NewSlog(o SlogOpts) *Slog {
 	if o.Handler == nil {
 		o.Handler = buildDefaultHandler(os.Stderr, o.LogLevel, o.IncludeSource)
 	}
-	if o.Component == "" {
-		o.Component = "vise"
+
+	slogger := slog.New(o.Handler)
+	if o.Component != "" {
+		slogger = slogger.With("component", o.Component)
 	}
 	return &Slog{
-		slogger: slog.New(o.Handler).With("component", o.Component),
+		slogger: slogger,
 		ctxKeys: o.CtxKeys,
 	}
 }
+
+// With creates a new logger with additional attributes
+func (s *Slog) With(args ...any) *Slog {
+	return &Slog{
+		slogger: s.slogger.With(args...),
+		ctxKeys: s.ctxKeys,
+	}
+}
+
+// Global logger instance
+var Global *Slog = NewSlog(SlogOpts{
+	LogLevel: LevelTrace,
+})
 
 func buildDefaultHandler(w io.Writer, level slog.Level, includeSource bool) slog.Handler {
 	return slog.NewTextHandler(w, &slog.HandlerOptions{
@@ -108,22 +135,6 @@ func (s *Slog) logWithCallerCtx(ctx context.Context, level slog.Level, msg strin
 	record.AddAttrs(attrs...)
 
 	_ = s.slogger.Handler().Handle(ctx, record)
-}
-
-func (s *Slog) Writef(w io.Writer, level int, msg string, args ...any) {
-	s.slogger.Warn("Writef not implemented")
-}
-
-func (s *Slog) WriteCtxf(ctx context.Context, w io.Writer, level int, msg string, args ...any) {
-	s.slogger.Warn("WriteCtxf not implemented")
-}
-
-func (s *Slog) Printf(level int, msg string, args ...any) {
-	s.slogger.Warn("Printf not implemented")
-}
-
-func (s *Slog) PrintCtxf(ctx context.Context, level int, msg string, args ...any) {
-	s.slogger.Warn("PrintCtxf not implemented")
 }
 
 func (s *Slog) Tracef(msg string, args ...any) {

@@ -16,7 +16,7 @@ import (
 	"github.com/grassrootseconomics/go-vise/db"
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
 	gdbmdb "github.com/grassrootseconomics/go-vise/db/gdbm"
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 var (
@@ -25,7 +25,7 @@ var (
 	staticloadPrefix = ".txt"
 	templatePrefix   = ""
 	scan             = make(map[string]string)
-	logg             = logging.NewVanilla()
+	logg             = slogging.Global.With("component", "dbconvert")
 	dbg              = map[uint8]string{
 		db.DATATYPE_BIN:        "BIN",
 		db.DATATYPE_TEMPLATE:   "TEMPLATE",

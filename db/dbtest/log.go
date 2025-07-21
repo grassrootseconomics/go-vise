@@ -1,9 +1,9 @@
 package dbtest
 
 import (
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 var (
-	logg logging.Logger = logging.NewVanilla().WithDomain("dbtest")
+	logg = slogging.Global.With("component", "dbtest")
 )
