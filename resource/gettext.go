@@ -3,7 +3,7 @@ package resource
 import (
 	"context"
 
-	gotext "gopkg.in/leonelquinteros/gotext.v1"
+	"github.com/leonelquinteros/gotext"
 
 	"github.com/grassrootseconomics/go-vise/lang"
 )
@@ -42,6 +42,8 @@ func (p *PoResource) WithLanguage(ln lang.Language) *PoResource {
 	return p
 }
 
+// Disable vet when running tests: go test -v ./resource/ -vet=off
+// https://github.com/leonelquinteros/gotext/issues/117
 func (p *PoResource) get(ctx context.Context, sym string, domain string, menu bool) (string, error) {
 	s := sym
 	ln, ok := lang.LanguageFromContext(ctx)

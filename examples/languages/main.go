@@ -7,8 +7,9 @@ import (
 	"os"
 	"path"
 
+	"github.com/leonelquinteros/gotext"
+
 	testdataloader "github.com/peteole/testdata-loader"
-	gotext "gopkg.in/leonelquinteros/gotext.v1"
 
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
 	"github.com/grassrootseconomics/go-vise/engine"
