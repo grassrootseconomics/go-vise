@@ -178,8 +178,6 @@ The included implementations are:
 An volatile, in-process store. Used in most tests.
 @item FsDb
 A filesystem-backed store using subdirectories to separate sessions.
-@item GdbmDb
-A @url{https://www.gnu.org/software/gdbm/gdbm,gdbm} backed store.
 @item PgDb
 A @url{https://www.postgresql.org/,Postgres} backed store, using a single table with two @code{BYTEA} columns and a connection pool.
 @end table

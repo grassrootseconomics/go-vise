@@ -6,7 +6,6 @@ require (
 	github.com/alecthomas/participle/v2 v2.0.0
 	github.com/barbashov/iso639-3 v0.0.0-20211020172741-1f4ffb2d8d1c
 	github.com/fxamacker/cbor/v2 v2.4.0
-	github.com/graygnuorg/go-gdbm v0.0.0-20220711140707-71387d66dce4
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/lmittmann/tint v1.0.7
 	github.com/pashagolub/pgxmock/v4 v4.7.0

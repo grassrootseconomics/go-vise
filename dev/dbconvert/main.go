@@ -15,7 +15,6 @@ import (
 
 	"github.com/grassrootseconomics/go-vise/db"
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
-	gdbmdb "github.com/grassrootseconomics/go-vise/db/gdbm"
 	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
@@ -116,14 +115,11 @@ func main() {
 	var dbFile string
 	var dbBackend string
 	flag.StringVar(&dbPath, "d", "", "output directory")
-	flag.StringVar(&dbBackend, "backend", "gdbm", "db backend. valid choices are: gdbm (default), fs")
+	flag.StringVar(&dbBackend, "backend", "fs", "db backend. valid choices are: fs")
 	flag.Parse()
 
 	ctx := context.Background()
 	switch dbBackend {
-	case "gdbm":
-		store = gdbmdb.NewGdbmDb()
-		dbFile = "vise_resources.gdbm"
 	case "fs":
 		store = fsdb.NewFsDb()
 	}
