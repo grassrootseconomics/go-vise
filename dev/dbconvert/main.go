@@ -163,5 +163,5 @@ func main() {
 		fmt.Fprintf(os.Stderr, "failed to process input: %s", err)
 		os.Exit(1)
 	}
-	fmt.Fprintf(os.Stdout, dbPath)
+	fmt.Fprint(os.Stdout, dbPath)
 }

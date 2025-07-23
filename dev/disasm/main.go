@@ -24,5 +24,5 @@ func main() {
 		fmt.Fprintf(os.Stderr, "parse error: %v", err)
 		os.Exit(1)
 	}
-	fmt.Printf(r)
+	fmt.Print(r)
 }
