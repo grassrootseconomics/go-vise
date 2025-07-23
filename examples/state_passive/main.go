@@ -13,9 +13,9 @@ import (
 
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
 	"github.com/grassrootseconomics/go-vise/engine"
-	"github.com/grassrootseconomics/go-vise/logging"
 	"github.com/grassrootseconomics/go-vise/persist"
 	"github.com/grassrootseconomics/go-vise/resource"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 	"github.com/grassrootseconomics/go-vise/state"
 )
 
@@ -27,7 +27,7 @@ const (
 )
 
 var (
-	logg = logging.NewVanilla()
+	logg = slogging.Get().With("component", "state-passive-example")
 )
 
 type fsData struct {

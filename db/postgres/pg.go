@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/grassrootseconomics/go-vise/db"
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 type (
@@ -35,7 +35,7 @@ type (
 		itBase []byte
 		// tx      pgx.Tx
 		// multi   bool
-		logg    logging.Logger
+		logg    slogging.Logger
 		queries *queries
 	}
 )

@@ -16,14 +16,14 @@ import (
 	"github.com/grassrootseconomics/go-vise/db"
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
 	"github.com/grassrootseconomics/go-vise/engine"
-	"github.com/grassrootseconomics/go-vise/logging"
 	"github.com/grassrootseconomics/go-vise/persist"
 	"github.com/grassrootseconomics/go-vise/resource"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 	"github.com/grassrootseconomics/go-vise/state"
 )
 
 var (
-	logg          = logging.NewVanilla()
+	logg          = slogging.Get().With("component", "db-example")
 	baseDir       = testdataloader.GetBasePath()
 	scriptDir     = path.Join(baseDir, "examples", "db")
 	store         = fsdb.NewFsDb()

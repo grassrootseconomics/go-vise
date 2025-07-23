@@ -11,12 +11,12 @@ import (
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
 	"github.com/grassrootseconomics/go-vise/debug"
 	"github.com/grassrootseconomics/go-vise/lang"
-	"github.com/grassrootseconomics/go-vise/logging"
 	"github.com/grassrootseconomics/go-vise/resource"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 var (
-	logg = logging.NewVanilla()
+	logg = slogging.Get().With("component", "gettext-export")
 )
 
 type translator struct {

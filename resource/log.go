@@ -1,9 +1,9 @@
 package resource
 
 import (
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 var (
-	logg logging.Logger = logging.NewVanilla().WithDomain("resource")
+	logg = slogging.Get().With("component", "resource")
 )

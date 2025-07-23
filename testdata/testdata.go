@@ -8,15 +8,15 @@ import (
 
 	"github.com/grassrootseconomics/go-vise/db"
 	fsdb "github.com/grassrootseconomics/go-vise/db/fs"
-	"github.com/grassrootseconomics/go-vise/logging"
 	"github.com/grassrootseconomics/go-vise/resource"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 var (
 	ctx   = context.Background()
 	store = fsdb.NewFsDb()
 	out   = outNew
-	logg  = logging.NewVanilla().WithDomain("testdata")
+	logg  = slogging.Get().With("component", "testdata")
 )
 
 type echoFunc struct {

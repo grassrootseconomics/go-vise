@@ -250,7 +250,7 @@ func (a Arg) String() string {
 		s += " Description: " + *a.Desc
 	}
 
-	return fmt.Sprintf(s)
+	return s
 }
 
 // Instruction represents one full line of assembly code.

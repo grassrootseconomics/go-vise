@@ -1,9 +1,9 @@
 package db
 
 import (
-	"github.com/grassrootseconomics/go-vise/logging"
+	slogging "github.com/grassrootseconomics/go-vise/slog"
 )
 
 var (
-	logg logging.Logger = logging.NewVanilla().WithDomain("db")
+	logg = slogging.Get().With("component", "db")
 )
