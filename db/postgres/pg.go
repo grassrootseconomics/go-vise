@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 
-	pgx "github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/grassrootseconomics/go-vise/db"
@@ -14,7 +16,10 @@ import (
 
 type (
 	PgInterface interface {
-		Begin(context.Context) (pgx.Tx, error)
+		Exec(context.Context, string, ...any) (pgconn.CommandTag, error)
+		Query(context.Context, string, ...any) (pgx.Rows, error)
+		QueryRow(context.Context, string, ...any) pgx.Row
+		Ping(context.Context) error
 		Close()
 	}
 
@@ -27,16 +32,15 @@ type (
 	// pgDb is a Postgres backend implementation of the Db interface.
 	pgDb struct {
 		*db.DbBase
-		conn   PgInterface
-		schema string
-		prefix uint8
-		prepd  bool
-		it     pgx.Rows
-		itBase []byte
-		// tx      pgx.Tx
-		// multi   bool
+		conn    PgInterface
+		schema  string
+		prefix  uint8
+		prepd   bool
+		it      pgx.Rows
+		itBase  []byte
 		logg    slogging.Logger
 		queries *queries
+		once    sync.Once
 	}
 )
 
@@ -50,9 +54,9 @@ var (
 func NewPgDb() *pgDb {
 	db := &pgDb{
 		DbBase: db.NewDbBase(),
+		logg:   slogging.Get().With("component", "postgres"),
 	}
 	db.WithSchema("public")
-	db.SetLogger(nil)
 	return db
 }
 
@@ -64,7 +68,9 @@ func (pdb *pgDb) Base() *db.DbBase {
 // WithSchema sets the Postgres schema to use for the storage table.
 func (pdb *pgDb) WithSchema(schema string) *pgDb {
 	if pdb.prepd {
-		pdb.logg.Warnf("cannot change schema after connection established due to prepared statement caching")
+		pdb.logg.Errorf("cannot change schema after connection established due to prepared statement caching")
+		// We starught up panic here to avoid any further issues.
+		panic(ErrSchemaChange)
 	} else {
 		pdb.schema = schema
 		pdb.updateQueries()
@@ -105,106 +111,24 @@ func (pdb *pgDb) Connect(ctx context.Context, connStr string) error {
 	return pdb.ensureTable(ctx)
 }
 
-func (pdb *pgDb) executeTransaction(ctx context.Context, fn func(tx pgx.Tx) error) error {
-	tx, err := pdb.conn.Begin(ctx)
-	pdb.logg.TraceCtxf(ctx, "begin tx", "err", err)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		if err != nil {
-			pdb.logg.TraceCtxf(ctx, "rollback tx", "err", err)
-			tx.Rollback(ctx)
-		} else {
-			pdb.logg.TraceCtxf(ctx, "commit tx", "err", err)
-			tx.Commit(ctx)
-		}
-	}()
-
-	if err = fn(tx); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (pdb *pgDb) Start(ctx context.Context) error {
 	pdb.logg.Warnf("Start() deprecated: use executeTransaction instead")
 	return nil
-
-	// if pdb.tx != nil {
-	// 	return db.ErrTxExist
-	// }
-	// err := pdb.start(ctx)
-	// if err != nil {
-	// 	return err
-	// }
-	// pdb.multi = true
-	// return nil
-}
-
-func (pdb *pgDb) start(ctx context.Context) error {
-	pdb.logg.Warnf("start() deprecated: use executeTransaction instead")
-	return nil
-
-	// if pdb.tx != nil {
-	// 	return nil
-	// }
-	// tx, err := pdb.conn.BeginTx(ctx, defaultTxOptions)
-	// pdb.logg.TraceCtxf(ctx, "begin single tx", "err", err)
-	// if err != nil {
-	// 	return err
-	// }
-	// pdb.tx = tx
-	// return nil
 }
 
 func (pdb *pgDb) Stop(ctx context.Context) error {
 	pdb.logg.Warnf("Stop() deprecated: use executeTransaction instead")
 	return nil
-
-	// if !pdb.multi {
-	// 	return db.ErrSingleTx
-	// }
-	// return pdb.stop(ctx)
-}
-
-func (pdb *pgDb) stopSingle(ctx context.Context) error {
-	pdb.logg.Warnf("stopSingle() deprecated: use executeTransaction instead")
-	return nil
-	// if pdb.multi {
-	// 	return nil
-	// }
-	// err := pdb.tx.Commit(ctx)
-	// pdb.logg.TraceCtxf(ctx, "stop single tx", "err", err)
-	// pdb.tx = nil
-	// return err
-}
-
-func (pdb *pgDb) stop(ctx context.Context) error {
-	pdb.logg.Warnf("stop() deprecated: use executeTransaction instead")
-	return nil
-	// if pdb.tx == nil {
-	// 	return db.ErrNoTx
-	// }
-	// err := pdb.tx.Commit(ctx)
-	// pdb.logg.TraceCtxf(ctx, "stop multi tx", "err", err)
-	// pdb.tx = nil
-	// return err
 }
 
 func (pdb *pgDb) Abort(ctx context.Context) {
 	pdb.logg.Warnf("Abort() deprecated: use executeTransaction instead")
-	return
-	// pdb.logg.InfoCtxf(ctx, "aborting tx", "tx", pdb.tx)
-	// pdb.tx.Rollback(ctx)
-	// pdb.tx = nil
 }
 
 // Put implements Db.
 func (pdb *pgDb) Put(ctx context.Context, key []byte, val []byte) error {
 	if !pdb.CheckPut() {
-		return errors.New("unsafe put and safety set")
+		return ErrUnsafePut
 	}
 
 	lk, err := pdb.ToKey(ctx, key)
@@ -218,10 +142,8 @@ func (pdb *pgDb) Put(ctx context.Context, key []byte, val []byte) error {
 		actualKey = lk.Translation
 	}
 
-	return pdb.executeTransaction(ctx, func(tx pgx.Tx) error {
-		_, err := tx.Exec(ctx, pdb.queries.put, actualKey, val)
-		return err
-	})
+	_, err = pdb.conn.Exec(ctx, pdb.queries.put, actualKey, val)
+	return err
 }
 
 // Get implements Db.
@@ -236,17 +158,15 @@ func (pdb *pgDb) Get(ctx context.Context, key []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	if err := pdb.executeTransaction(ctx, func(tx pgx.Tx) error {
-		pdb.logg.TraceCtxf(ctx, "get", "key", key)
+	pdb.logg.TraceCtxf(ctx, "get", "key", key)
+	if lk.Translation != nil {
+		queryParam = lk.Translation
+	} else {
+		queryParam = lk.Default
+	}
 
-		if lk.Translation != nil {
-			queryParam = lk.Translation
-		} else {
-			queryParam = lk.Default
-		}
-
-		return tx.QueryRow(ctx, pdb.queries.get, queryParam).Scan(&rr)
-	}); err != nil {
+	err = pdb.conn.QueryRow(ctx, pdb.queries.get, queryParam).Scan(&rr)
+	if err != nil {
 		return nil, err
 	}
 
@@ -255,28 +175,30 @@ func (pdb *pgDb) Get(ctx context.Context, key []byte) ([]byte, error) {
 
 // Close implements Db.
 func (pdb *pgDb) Close(ctx context.Context) error {
-	// err := pdb.Stop(ctx)
-	// if err == db.ErrNoTx {
-	// 	err = nil
-	// }
+	if pdb.conn == nil {
+		return ErrNoConnection
+	}
 	pdb.conn.Close()
 	return nil
 }
 
 // set up table
-// set up table
 func (pdb *pgDb) ensureTable(ctx context.Context) error {
-	if pdb.prepd {
-		pdb.logg.WarnCtxf(ctx, "ensureTable called more than once")
-		return nil
+	var err error
+	pdb.once.Do(func() {
+		if _, execErr := pdb.conn.Exec(ctx, pdb.queries.migrate); execErr != nil {
+			err = fmt.Errorf("failed to ensure table exists: %w", execErr)
+			return
+		}
+		pdb.prepd = true
+	})
+
+	if err != nil {
+		return err
 	}
 
-	if err := pdb.executeTransaction(ctx, func(tx pgx.Tx) error {
-		_, err := tx.Exec(ctx, pdb.queries.migrate)
-
-		return err
-	}); err != nil {
-		return err
+	if !pdb.prepd {
+		pdb.logg.WarnCtxf(ctx, "ensureTable called but table not prepared")
 	}
 
 	return nil
