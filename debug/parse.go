@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	logg = slogging.Global.With("component", "debug")
+	logg = slogging.Get().With("component", "debug")
 )
 
 type NodeParseHandler struct {

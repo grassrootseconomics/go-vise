@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	logg        = slogging.Global.With("component", "session-example")
+	logg        = slogging.Get().With("component", "session-example")
 	baseDir     = testdataloader.GetBasePath()
 	scriptDir   = path.Join(baseDir, "examples", "session")
 	emptyResult = resource.Result{}

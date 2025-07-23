@@ -25,7 +25,7 @@ var (
 	staticloadPrefix = ".txt"
 	templatePrefix   = ""
 	scan             = make(map[string]string)
-	logg             = slogging.Global.With("component", "dbconvert")
+	logg             = slogging.Get().With("component", "dbconvert")
 	dbg              = map[uint8]string{
 		db.DATATYPE_BIN:        "BIN",
 		db.DATATYPE_TEMPLATE:   "TEMPLATE",

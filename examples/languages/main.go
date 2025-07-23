@@ -24,7 +24,7 @@ const (
 )
 
 var (
-	logg           = slogging.Global.With("component", "languages-example")
+	logg           = slogging.Get().With("component", "languages-example")
 	baseDir        = testdataloader.GetBasePath()
 	scriptDir      = path.Join(baseDir, "examples", "languages")
 	translationDir = path.Join(scriptDir, "locale")

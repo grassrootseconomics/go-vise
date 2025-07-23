@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	logg = slogging.Global.With("component", "logdb")
+	logg = slogging.Get().With("component", "logdb")
 )
 
 // TODO: add a formatted dumper for the logdb

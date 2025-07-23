@@ -25,7 +25,7 @@ const (
 )
 
 var (
-	logg      = slogging.Global.With("component", "pincheck-example")
+	logg      = slogging.Get().With("component", "pincheck-example")
 	baseDir   = testdataloader.GetBasePath()
 	scriptDir = path.Join(baseDir, "examples", "pincheck")
 	pin       = []byte("1234")

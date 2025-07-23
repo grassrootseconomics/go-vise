@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	logg = slogging.Global.With("component", "gettext-export")
+	logg = slogging.Get().With("component", "gettext-export")
 )
 
 type translator struct {

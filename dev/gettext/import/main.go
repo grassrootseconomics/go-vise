@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	logg         = slogging.Global.With("component", "gettext-import")
+	logg         = slogging.Get().With("component", "gettext-import")
 	writeDomains = []string{
 		resource.PoDomain,
 		resource.TemplateKeyPoDomain,

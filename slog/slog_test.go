@@ -72,7 +72,7 @@ func TestNewSlogOutputWithCtx(t *testing.T) {
 			LogLevel:      LevelTrace,
 			IncludeSource: true,
 		}),
-		CtxKeys: []string{"y"},
+		CtxKeys: []any{"y"},
 	})
 
 	ctx := context.Background()
@@ -95,7 +95,7 @@ func TestIntegrationWithColourfulHandler(t *testing.T) {
 			TimeFormat: time.Kitchen,
 			AddSource:  true,
 		}),
-		CtxKeys: []string{"y", "z"},
+		CtxKeys: []any{"y", "z"},
 	})
 
 	ctx := context.Background()

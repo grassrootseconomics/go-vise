@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	logg      = slogging.Global.With("component", "state-example")
+	logg      = slogging.Get().With("component", "state-example")
 	baseDir   = testdataloader.GetBasePath()
 	scriptDir = path.Join(baseDir, "examples", "state")
 )

@@ -23,7 +23,7 @@ import (
 )
 
 var (
-	logg          = slogging.Global.With("component", "db-example")
+	logg          = slogging.Get().With("component", "db-example")
 	baseDir       = testdataloader.GetBasePath()
 	scriptDir     = path.Join(baseDir, "examples", "db")
 	store         = fsdb.NewFsDb()

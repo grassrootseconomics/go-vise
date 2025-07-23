@@ -5,5 +5,5 @@ import (
 )
 
 var (
-	logg = slogging.Global.With("component", "vm")
+	logg = slogging.Get().With("component", "vm")
 )

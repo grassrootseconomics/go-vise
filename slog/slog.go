@@ -2,11 +2,11 @@ package slogging
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
-	"runtime"
-	"time"
+	"sync"
 )
 
 // Logger defines the interface for structured logging
@@ -32,13 +32,10 @@ var _ Logger = (*Slog)(nil)
 type (
 	Slog struct {
 		slogger *slog.Logger
-		ctxKeys []string
+		ctxKeys []any
 	}
 
 	SlogOpts struct {
-		// Component enriches each log line with a componenent key/value.
-		// Useful for aggregating/filtering with your log collector.
-		Component string
 		// Handler allows overriding of the defult Logfmt handler.
 		Handler slog.Handler
 		// Minimal level to log. Defaults to Info.
@@ -48,8 +45,13 @@ type (
 		// No effect when passing a custom handler.
 		IncludeSource bool
 		// CtxKeys are the known keys to be used for logging context values.
-		CtxKeys []string
+		CtxKeys []any
 	}
+)
+
+var (
+	defaultLogger *Slog
+	once          sync.Once
 )
 
 // NewSlog creates a new Slog logger instance.
@@ -59,9 +61,6 @@ func NewSlog(o SlogOpts) *Slog {
 	}
 
 	slogger := slog.New(o.Handler)
-	if o.Component != "" {
-		slogger = slogger.With("component", o.Component)
-	}
 	return &Slog{
 		slogger: slogger,
 		ctxKeys: o.CtxKeys,
@@ -76,10 +75,20 @@ func (s *Slog) With(args ...any) *Slog {
 	}
 }
 
-// Global logger instance
-var Global *Slog = NewSlog(SlogOpts{
-	LogLevel: LevelTrace,
-})
+func SetGlobal(logger *Slog) {
+	defaultLogger = logger
+}
+
+func Get() *Slog {
+	once.Do(func() {
+		if defaultLogger == nil {
+			defaultLogger = NewSlog(SlogOpts{
+				LogLevel: LevelTrace,
+			})
+		}
+	})
+	return defaultLogger
+}
 
 func buildDefaultHandler(w io.Writer, level slog.Level, includeSource bool) slog.Handler {
 	return slog.NewTextHandler(w, &slog.HandlerOptions{
@@ -98,101 +107,77 @@ func buildDefaultHandler(w io.Writer, level slog.Level, includeSource bool) slog
 	})
 }
 
-func (s *Slog) logWithCaller(ctx context.Context, level slog.Level, msg string, args ...any) {
-	if !s.slogger.Enabled(ctx, level) {
-		return
-	}
-
-	var pcs [1]uintptr
-	runtime.Callers(3, pcs[:])
-
-	record := slog.NewRecord(time.Now(), level, msg, pcs[0])
-
-	if len(args) > 0 {
-		for i := 0; i < len(args)-1; i += 2 {
-			key, ok := args[i].(string)
-			if !ok {
-				continue
-			}
-			record.AddAttrs(slog.Any(key, args[i+1]))
-		}
-	}
-
-	_ = s.slogger.Handler().Handle(ctx, record)
-}
-
-func (s *Slog) logWithCallerCtx(ctx context.Context, level slog.Level, msg string, args ...any) {
-	if !s.slogger.Enabled(ctx, level) {
-		return
-	}
-
-	var pcs [1]uintptr
-	runtime.Callers(3, pcs[:])
-
-	record := slog.NewRecord(time.Now(), level, msg, pcs[0])
-
-	attrs := s.extractContextKeys(ctx, args...)
-	record.AddAttrs(attrs...)
-
-	_ = s.slogger.Handler().Handle(ctx, record)
-}
-
 func (s *Slog) Tracef(msg string, args ...any) {
-	s.logWithCaller(context.Background(), LevelTrace, msg, args...)
+	attrs := s.argsToAttrs(args)
+	s.slogger.LogAttrs(context.Background(), LevelTrace, msg, attrs...)
 }
 
 func (s *Slog) TraceCtxf(ctx context.Context, msg string, args ...any) {
-	s.logWithCallerCtx(ctx, LevelTrace, msg, args...)
+	attrs := s.extractContextAndArgs(ctx, args...)
+	s.slogger.LogAttrs(ctx, LevelTrace, msg, attrs...)
 }
 
 func (s *Slog) Debugf(msg string, args ...any) {
-	s.logWithCaller(context.Background(), slog.LevelDebug, msg, args...)
+	attrs := s.argsToAttrs(args)
+	s.slogger.LogAttrs(context.Background(), slog.LevelDebug, msg, attrs...)
 }
 
 func (s *Slog) DebugCtxf(ctx context.Context, msg string, args ...any) {
-	s.logWithCallerCtx(ctx, slog.LevelDebug, msg, args...)
+	attrs := s.extractContextAndArgs(ctx, args...)
+	s.slogger.LogAttrs(ctx, slog.LevelDebug, msg, attrs...)
 }
 
 func (s *Slog) Infof(msg string, args ...any) {
-	s.logWithCaller(context.Background(), slog.LevelInfo, msg, args...)
+	attrs := s.argsToAttrs(args)
+	s.slogger.LogAttrs(context.Background(), slog.LevelInfo, msg, attrs...)
 }
 
 func (s *Slog) InfoCtxf(ctx context.Context, msg string, args ...any) {
-	s.logWithCallerCtx(ctx, slog.LevelInfo, msg, args...)
+	attrs := s.extractContextAndArgs(ctx, args...)
+	s.slogger.LogAttrs(ctx, slog.LevelInfo, msg, attrs...)
 }
 
 func (s *Slog) Warnf(msg string, args ...any) {
-	s.logWithCaller(context.Background(), slog.LevelWarn, msg, args...)
+	attrs := s.argsToAttrs(args)
+	s.slogger.LogAttrs(context.Background(), slog.LevelWarn, msg, attrs...)
 }
 
 func (s *Slog) WarnCtxf(ctx context.Context, msg string, args ...any) {
-	s.logWithCallerCtx(ctx, slog.LevelWarn, msg, args...)
+	attrs := s.extractContextAndArgs(ctx, args...)
+	s.slogger.LogAttrs(ctx, slog.LevelWarn, msg, attrs...)
 }
 
 func (s *Slog) Errorf(msg string, args ...any) {
-	s.logWithCaller(context.Background(), slog.LevelError, msg, args...)
+	attrs := s.argsToAttrs(args)
+	s.slogger.LogAttrs(context.Background(), slog.LevelError, msg, attrs...)
 }
 
 func (s *Slog) ErrorCtxf(ctx context.Context, msg string, args ...any) {
-	s.logWithCallerCtx(ctx, slog.LevelError, msg, args...)
+	attrs := s.extractContextAndArgs(ctx, args...)
+	s.slogger.LogAttrs(ctx, slog.LevelError, msg, attrs...)
 }
 
-func (s *Slog) extractContextKeys(ctx context.Context, args ...any) []slog.Attr {
-	attrs := make([]slog.Attr, 0, len(s.ctxKeys)+len(args)/2)
+func (s *Slog) extractContextAndArgs(ctx context.Context, args ...any) []slog.Attr {
+	attrs := s.argsToAttrs(args)
 
-	for i := 0; i < len(args)-1; i += 2 {
+	for _, key := range s.ctxKeys {
+		if val := ctx.Value(key); val != nil {
+			keyStr := fmt.Sprintf("%v", key)
+			attrs = append(attrs, slog.Any(keyStr, val))
+		}
+	}
+
+	return attrs
+}
+
+func (s *Slog) argsToAttrs(args []any) []slog.Attr {
+	attrs := make([]slog.Attr, 0, len(args)/2)
+	for i := 0; i+1 < len(args); i += 2 {
 		key, ok := args[i].(string)
 		if !ok {
 			continue
 		}
 		attrs = append(attrs, slog.Any(key, args[i+1]))
 	}
-
-	for _, key := range s.ctxKeys {
-		if val, ok := ctx.Value(key).(string); ok {
-			attrs = append(attrs, slog.String(key, val))
-		}
-	}
-
 	return attrs
 }

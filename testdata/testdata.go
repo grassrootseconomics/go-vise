@@ -16,7 +16,7 @@ var (
 	ctx   = context.Background()
 	store = fsdb.NewFsDb()
 	out   = outNew
-	logg  = slogging.Global.With("component", "testdata")
+	logg  = slogging.Get().With("component", "testdata")
 )
 
 type echoFunc struct {

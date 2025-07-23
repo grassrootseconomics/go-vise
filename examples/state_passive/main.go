@@ -27,7 +27,7 @@ const (
 )
 
 var (
-	logg = slogging.Global.With("component", "state-passive-example")
+	logg = slogging.Get().With("component", "state-passive-example")
 )
 
 type fsData struct {

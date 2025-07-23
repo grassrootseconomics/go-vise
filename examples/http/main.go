@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	logg = slogging.Global.With("component", "http")
+	logg = slogging.Get().With("component", "http")
 )
 
 type LocalHandler struct {
