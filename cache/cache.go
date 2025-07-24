@@ -2,12 +2,14 @@ package cache
 
 import (
 	"fmt"
+	"sync"
 )
 
 // Cache stores loaded content, enforcing size limits and keeping track of size usage.
 //
 // TODO: hide values from client, while allowing cbor serialization
 type Cache struct {
+	mu sync.RWMutex
 	// Total allowed cumulative size of values (not code) in cache
 	CacheSize uint32
 	// Currently used bytes by all values (not code) in cache
@@ -32,22 +34,31 @@ func NewCache() *Cache {
 
 // Invalidate implements the Memory interface.
 func (ca *Cache) Invalidate() {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
 	ca.invalid = true
 }
 
 // Invalid implements the Memory interface.
 func (ca *Cache) Invalid() bool {
+	ca.mu.RLock()
+	defer ca.mu.RUnlock()
 	return ca.invalid
 }
 
 // WithCacheSize is a chainable method that applies a cumulative cache size limitation for all cached items.
 func (ca *Cache) WithCacheSize(cacheSize uint32) *Cache {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
 	ca.CacheSize = cacheSize
 	return ca
 }
 
 // Add implements the Memory interface.
 func (ca *Cache) Add(key string, value string, sizeLimit uint16) error {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
+
 	if sizeLimit > 0 {
 		l := uint16(len(value))
 		if l > sizeLimit {
@@ -80,6 +91,8 @@ func (ca *Cache) Add(key string, value string, sizeLimit uint16) error {
 
 // ReservedSize implements the Memory interface.
 func (ca *Cache) ReservedSize(key string) (uint16, error) {
+	ca.mu.RLock()
+	defer ca.mu.RUnlock()
 	v, ok := ca.Sizes[key]
 	if !ok {
 		return 0, fmt.Errorf("unknown symbol: %s", key)
@@ -89,6 +102,9 @@ func (ca *Cache) ReservedSize(key string) (uint16, error) {
 
 // Update implements the Memory interface.
 func (ca *Cache) Update(key string, value string) error {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
+
 	sizeLimit := ca.Sizes[key]
 	if ca.Sizes[key] > 0 {
 		l := uint16(len(value))
@@ -118,6 +134,9 @@ func (ca *Cache) Update(key string, value string) error {
 
 // Get implements the Memory interface.
 func (ca *Cache) Get(key string) (string, error) {
+	ca.mu.RLock()
+	defer ca.mu.RUnlock()
+
 	i := ca.frameOf(key)
 	if i == -1 {
 		return "", fmt.Errorf("key '%s' not found in any frame", key)
@@ -131,6 +150,9 @@ func (ca *Cache) Get(key string) (string, error) {
 
 // Reset implements the Memory interface.
 func (ca *Cache) Reset() {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
+
 	var v string
 	if len(ca.Cache) == 0 {
 		return
@@ -145,6 +167,9 @@ func (ca *Cache) Reset() {
 
 // Push implements the Memory interface.
 func (ca *Cache) Push() error {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
+
 	m := make(map[string]string)
 	ca.Cache = append(ca.Cache, m)
 	return nil
@@ -152,6 +177,9 @@ func (ca *Cache) Push() error {
 
 // Pop implements the Memory interface.
 func (ca *Cache) Pop() error {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
+
 	l := len(ca.Cache)
 	if l == 0 {
 		return fmt.Errorf("already at top level")
@@ -166,13 +194,17 @@ func (ca *Cache) Pop() error {
 	}
 	ca.Cache = ca.Cache[:l]
 	if l == 0 {
-		ca.Push()
+		// Call push without locking since we already hold the lock
+		m := make(map[string]string)
+		ca.Cache = append(ca.Cache, m)
 	}
 	return nil
 }
 
 // Check returns true if a key already exists in the cache.
 func (ca *Cache) Check(key string) bool {
+	ca.mu.RLock()
+	defer ca.mu.RUnlock()
 	return ca.frameOf(key) == -1
 }
 
@@ -180,6 +212,9 @@ func (ca *Cache) Check(key string) bool {
 //
 // TODO: needs to be invalidated when out of scope
 func (ca *Cache) Last() string {
+	ca.mu.Lock()
+	defer ca.mu.Unlock()
+
 	s := ca.LastValue
 	ca.LastValue = ""
 	return s
@@ -212,11 +247,15 @@ func (ca *Cache) frameOf(key string) int {
 
 // Levels implements the Memory interface.
 func (ca *Cache) Levels() uint32 {
+	ca.mu.RLock()
+	defer ca.mu.RUnlock()
 	return uint32(len(ca.Cache))
 }
 
 // Keys implements the Memory interface.
 func (ca *Cache) Keys(level uint32) []string {
+	ca.mu.RLock()
+	defer ca.mu.RUnlock()
 	var r []string
 	for k := range ca.Cache[level] {
 		r = append(r, k)
