@@ -166,7 +166,6 @@ func (ca *Cache) Reset() {
 	for _, v = range ca.Cache[0] {
 		ca.CacheUseSize += uint32(len(v))
 	}
-	return
 }
 
 // Push implements the Memory interface.
