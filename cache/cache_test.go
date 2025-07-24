@@ -158,7 +158,7 @@ func TestCacheReset(t *testing.T) {
 	}
 	ca.Reset()
 	if ca.CacheUseSize != 3 {
-		t.Errorf("expected cache use size 0, got %v", ca.CacheUseSize)
+		t.Errorf("expected cache use size 3, got %v", ca.CacheUseSize)
 	}
 }
 
