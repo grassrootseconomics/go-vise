@@ -10,14 +10,22 @@ import (
 	"github.com/grassrootseconomics/go-vise/state"
 )
 
-// FlagParser is used to resolve flag strings to corresponding
-// flag index integer values.
-type FlagParser struct {
-	flag            map[string]string
-	flagDescription map[uint32]string
-	hi              uint32
-	debug           bool
-}
+type (
+	// FlagParser is used to resolve flag strings to corresponding
+	// flag index integer values.
+	FlagParser struct {
+		flag            map[string]string
+		flagDescription map[uint32]string
+		hi              uint32
+		debug           bool
+	}
+
+	FlagDefinition struct {
+		Name        string
+		Index       uint32
+		Description string
+	}
+)
 
 // NewFlagParser creates a new FlagParser
 func NewFlagParser() *FlagParser {
@@ -130,4 +138,29 @@ func (pp *FlagParser) Load(fp string) (int, error) {
 	}
 
 	return i, nil
+}
+
+func (pp *FlagParser) LoadFromRegistry(flagRegistry []FlagDefinition) error {
+	for _, flag := range flagRegistry {
+		if flag.Index < state.FLAG_USERSTART {
+			return fmt.Errorf("Minimum flag value is FLAG_USERSTART (%d)", state.FLAG_USERSTART)
+		}
+
+		pp.flag[flag.Name] = strconv.Itoa(int(flag.Index))
+		if flag.Index > pp.hi {
+			pp.hi = flag.Index
+		}
+
+		if flag.Description != "" {
+			pp.flagDescription[flag.Index] = flag.Description
+			logg.Debugf("added flag translation", "from", flag.Name, "to", flag.Index, "description", flag.Description)
+		} else {
+			logg.Debugf("added flag translation", "from", flag.Name, "to", flag.Index)
+		}
+
+		if pp.debug {
+			state.FlagDebugger.Register(flag.Index, strconv.Itoa(int(flag.Index)))
+		}
+	}
+	return nil
 }
