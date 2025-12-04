@@ -34,7 +34,6 @@ type (
 		*db.DbBase
 		conn    PgInterface
 		schema  string
-		prefix  uint8
 		prepd   bool
 		it      pgx.Rows
 		itBase  []byte
@@ -89,6 +88,10 @@ func (pdb *pgDb) updateQueries() {
 func (pdb *pgDb) WithConnection(pi PgInterface) *pgDb {
 	pdb.conn = pi
 	return pdb
+}
+
+func (pdb *pgDb) RawConnection() any {
+	return pdb.conn
 }
 
 // Connect implements Db.

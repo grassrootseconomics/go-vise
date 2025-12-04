@@ -1,5 +1,18 @@
 # vise: A Constrained Size Output Virtual Machine
 
+## Fork Notes
+
+1. If you run an old kv_vise db on postgres, trigger this non-breaking migration manually before using this library.
+
+```sql
+-- Removes the id column (saving space) and promotes key to the Primary Key.
+BEGIN;
+ALTER TABLE kv_vise DROP COLUMN id;
+ALTER TABLE kv_vise DROP CONSTRAINT IF EXISTS kv_vise_key_key;
+ALTER TABLE kv_vise ADD PRIMARY KEY (key);
+COMMIT;
+```
+
 Consider the following interaction:
 
 

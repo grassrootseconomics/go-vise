@@ -89,6 +89,8 @@ type Db interface {
 	Connection() string
 	// Base returns the underlying DbBase
 	Base() *DbBase
+	// RawConnection returns the underlying database connection object.
+	RawConnection() any
 }
 
 // LookupKey encapsulates two keys for a database entry; one for the default language, the other for the language in the context at which the LookupKey was generated.
@@ -136,8 +138,8 @@ type baseDb struct {
 	lang    *lang.Language
 	seal    bool
 	connStr string
-	known bool
-	logDb Db
+	known   bool
+	logDb   Db
 }
 
 // DbBase is a base class that must be extended by all db.Db implementers.

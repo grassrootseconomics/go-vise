@@ -66,6 +66,10 @@ func (fdb *fsDb) Connect(ctx context.Context, connStr string) error {
 	return nil
 }
 
+func (fdb *fsDb) RawConnection() any {
+	return fdb.dir
+}
+
 // ToKey overrides the BaseDb implementation, creating a base64 string
 // if binary keys have been enabled
 func (fdb *fsDb) ToKey(ctx context.Context, key []byte) (db.LookupKey, error) {
