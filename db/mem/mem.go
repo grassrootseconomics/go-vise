@@ -17,15 +17,15 @@ type memLookupKey struct {
 // memDb is a memory backend implementation of the Db interface.
 type memDb struct {
 	*db.DbBase
-	store map[string][]byte
-	dumpIdx int
+	store    map[string][]byte
+	dumpIdx  int
 	dumpKeys []string
 }
 
 // NewmemDb returns an in-process volatile Db implementation.
 func NewMemDb() *memDb {
 	db := &memDb{
-		DbBase: db.NewDbBase(),
+		DbBase:  db.NewDbBase(),
 		dumpIdx: -1,
 	}
 	return db
@@ -39,6 +39,10 @@ func (mdb *memDb) Base() *db.DbBase {
 // String implements the string interface.
 func (mdb *memDb) String() string {
 	return "memdb"
+}
+
+func (mdb *memDb) RawConnection() any {
+	return mdb.store
 }
 
 // Connect implements Db
